@@ -8,7 +8,7 @@ from .models import Text
 from summarizer.summary import * 
 
 # says that this function can do handle POST requests
-@api_view(["POST"])
+@api_view(["POST", "GET"])
 def summarize_view(request):
 	
 	# handle data inputs
@@ -26,4 +26,14 @@ def summarize_view(request):
 		
 		# return answer & status 200 (meaning everything worked!) 
 		return Response(summary, status=200)
+    if request.method == "GET":
+        # get all the text in the database
+        texts = (
+            " ".join([text.text for text in Text.objects.all()])
+            if Text.objects.all()
+            else "No text found."
+        )
+
+        # return all the text
+        return Response(texts, status=200)
 		
